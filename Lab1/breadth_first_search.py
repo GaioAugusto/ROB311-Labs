@@ -16,7 +16,6 @@ def breadth_first_search(problem):
     ####
     #   COMPLETE THIS CODE
     ####
-    # max_frontier_size = 0
     max_frontier_size = 1
     num_nodes_expanded = 0
     path = []
@@ -31,26 +30,21 @@ def breadth_first_search(problem):
     while frontier: # BFS loop
         curr_node = frontier.popleft() # remove first node from queue
         num_nodes_expanded = num_nodes_expanded + 1
-        if problem.goal_test(curr_node.state): # Found goal
+
+        if problem.goal_test(curr_node.state): # found goal
             path = problem.trace_path(curr_node)
             return path, num_nodes_expanded, max_frontier_size
         
         actions = problem.get_actions(curr_node.state)
         # expanding children
         for action in actions:
-            # Using 'get_child_node' from SimpleSearchProblem to get the next state as a Node
             child_node = problem.get_child_node(curr_node, action)
 
             if child_node.state not in visited:
                 visited.add(child_node.state)
                 frontier.append(child_node)
 
-        # Update max_frontier_size if needed
-        if len(frontier) > max_frontier_size:
-            max_frontier_size = len(frontier) # consider returning only len(frontier) instead of max frontier size
-
-    # If we exhaust the queue without finding a goal, return failure (empty path)
-    return [], num_nodes_expanded, max_frontier_size
+    return [], num_nodes_expanded, len(frontier) # did not find path
 
 if __name__ == '__main__':
     # Simple example
